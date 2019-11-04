@@ -6,6 +6,8 @@ import com.bluelinelabs.logansquare.LoganSquare;
 import com.github.fabienrenaud.jjb.JsonBench;
 import com.github.fabienrenaud.jjb.JsonUtils;
 import com.github.fabienrenaud.jjb.data.JsonSource;
+import com.github.fabienrenaud.jjb.model.Users;
+import foo.bar.UsersFbMapping;
 import okio.BufferedSink;
 import okio.Okio;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -146,4 +148,15 @@ public class Serialization extends JsonBench {
         return baos;
     }
 
+    @Benchmark
+    @Override
+    public Object protobuf() throws Exception {
+        return JSON_SOURCE().nextProtobuf().toByteArray();
+    }
+
+    @Benchmark
+    @Override
+    public Object flatbuffers() throws Exception {
+        return UsersFbMapping.serialize((Users) JSON_SOURCE().nextPojo());
+    }
 }

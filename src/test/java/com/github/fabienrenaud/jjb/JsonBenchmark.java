@@ -5,6 +5,8 @@ import com.github.fabienrenaud.jjb.model.Users;
 import com.github.fabienrenaud.jjb.support.Api;
 import com.github.fabienrenaud.jjb.support.BenchSupport;
 import com.github.fabienrenaud.jjb.support.Library;
+import foo.bar.User;
+import foo.bar.UsersFbMapping;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -37,6 +39,8 @@ public abstract class JsonBenchmark<T> {
 
         if (o instanceof Users || o instanceof Clients) {
             testPojo((T) o);
+        } else if (o instanceof User.UsersProto) {
+            testProtobuf((User.UsersProto) o);
         } else if (o instanceof com.cedarsoftware.util.io.JsonObject) {
             String v = com.cedarsoftware.util.io.JsonWriter.objectToJson(o, BENCH.JSON_SOURCE().provider().jsonioStreamOptions());
             testString(v);
@@ -44,7 +48,13 @@ public abstract class JsonBenchmark<T> {
             String v = com.grack.nanojson.JsonWriter.string(o);
             testString(v);
         } else {
-            testString(o.toString());
+            if (lib == Library.PROTOBUF) {
+                testProtobuf((byte[]) o);
+            } else if (lib == Library.FLATBUFFERS) {
+                testFlatBuffers((byte[]) o);
+            } else {
+                testString(o.toString());
+            }
         }
     }
 
@@ -56,12 +66,26 @@ public abstract class JsonBenchmark<T> {
         }
     }
 
+    private void testProtobuf(byte[] bytes) {
+        try {
+            testProtobuf(User.UsersProto.parseFrom(bytes));
+        } catch (IOException ex) {
+            fail(ex.getMessage());
+        }
+    }
+
+    private void testFlatBuffers(byte[] bytes) {
+        testPojo((T) UsersFbMapping.deserialize(bytes));
+    }
+
     private boolean supports(final Library lib) {
         return BENCH_SUPPORT.libapis().stream()
-            .anyMatch((l) -> l.lib() == lib && l.active() && l.api().contains(BENCH_API));
+                .anyMatch((l) -> l.lib() == lib && l.active() && l.api().contains(BENCH_API));
     }
 
     protected abstract void testPojo(T obj);
+
+    protected abstract void testProtobuf(User.UsersProto obj);
 
     protected abstract Class<T> pojoType();
 
@@ -239,11 +263,25 @@ public abstract class JsonBenchmark<T> {
             test(Library.UNDERSCORE_JAVA, BENCH.underscore_java());
         }
     }
-    
+
     @Test
     public void purejson() throws Exception {
         for (int i = 0; i < ITERATIONS; i++) {
-            test(Library.PUREJSON, BENCH.underscore_java());
+            test(Library.PUREJSON, BENCH.purejson());
+        }
+    }
+
+    @Test
+    public void protobuf() throws Exception {
+        for (int i = 0; i < ITERATIONS; i++) {
+            test(Library.PROTOBUF, BENCH.protobuf());
+        }
+    }
+
+    @Test
+    public void flatbuffers() throws Exception {
+        for (int i = 0; i < ITERATIONS; i++) {
+            test(Library.FLATBUFFERS, BENCH.flatbuffers());
         }
     }
 }

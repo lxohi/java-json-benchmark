@@ -3,6 +3,7 @@ package com.github.fabienrenaud.jjb;
 import com.github.fabienrenaud.jjb.model.Clients;
 import com.github.fabienrenaud.jjb.support.Api;
 import com.github.fabienrenaud.jjb.support.BenchSupport;
+import foo.bar.User;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -42,6 +43,11 @@ public abstract class JsonBenchmarkClientsTest extends JsonBenchmark<Clients> {
             System.out.println();
             fail();
         }
+    }
+
+    @Override
+    protected void testProtobuf(User.UsersProto obj) {
+        throw new RuntimeException("testProtobuf for Clients not implemented!");
     }
 
     @Override

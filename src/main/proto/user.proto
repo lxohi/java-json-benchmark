@@ -1,0 +1,36 @@
+syntax = "proto3";
+package foo.bar;
+
+message UsersProto {
+    repeated UserProto users = 1;
+}
+
+message UserProto {
+    string id = 1;
+    int32 index = 2;
+    string guid = 3;
+    bool isActive = 4;
+    string balance = 5;
+    string picture = 6;
+    int32 age = 7;
+    string eyeColor = 8;
+    string name = 9;
+    string gender = 10;
+    string company = 11;
+    string email = 12;
+    string phone = 13;
+    string address = 14;
+    string about = 15;
+    string registered = 16;
+    double latitude = 17;
+    double longitude = 18;
+    repeated string tags = 19;
+    repeated FriendProto friends = 20;
+    string greeting = 21;
+    string favoriteFruit = 22;
+}
+
+message FriendProto {
+    string id = 1;
+    string name = 2;
+}

@@ -9,12 +9,13 @@ public class ClientsSerializationTest extends JsonBenchmarkClientsTest {
 
     public ClientsSerializationTest() {
         super(new Serialization() {
-                private final JsonSource source = JsonSourceFactory.create("clients", 1, 2000);
-                @Override
-                public JsonSource JSON_SOURCE() {
-                    return source;
-                }
-            }, Api.DATABIND);
+            private final JsonSource source = JsonSourceFactory.create("clients", 1, 2000);
+
+            @Override
+            public JsonSource JSON_SOURCE() {
+                return source;
+            }
+        }, Api.DATABIND);
     }
 
     @Override
@@ -41,4 +42,13 @@ public class ClientsSerializationTest extends JsonBenchmarkClientsTest {
     public void jsonsmart() throws Exception {
         // FIXME: tried to access field java.time.LocalDate.month
     }
+
+    @Override
+    public void protobuf() throws Exception {
+    }
+
+    @Override
+    public void flatbuffers() throws Exception {
+    }
+
 }

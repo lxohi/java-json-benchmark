@@ -1,0 +1,35 @@
+namespace foo.bar;
+
+table UsersFb {
+    users:[UserFb];
+}
+
+table UserFb {
+    id:string;
+    index:int;
+    guid:string;
+    isActive:bool;
+    balance:string;
+    picture:string;
+    age:int;
+    eyeColor:string;
+    name:string;
+    gender:string;
+    company:string;
+    email:string;
+    phone:string;
+    address:string;
+    about:string;
+    registered:string;
+    latitude:double;
+    longitude:double;
+    tags:[string];
+    friends:[FriendFb];
+    greeting:string;
+    favoriteFruit:string;
+}
+
+table FriendFb {
+    id:string;
+    name:string;
+}

@@ -5,6 +5,7 @@ import com.bluelinelabs.logansquare.LoganSquare;
 import com.github.fabienrenaud.jjb.JsonBench;
 import com.github.fabienrenaud.jjb.data.JsonSource;
 import com.google.gson.JsonSyntaxException;
+import foo.bar.UsersFbMapping;
 import org.openjdk.jmh.annotations.Benchmark;
 
 import java.io.IOException;
@@ -115,6 +116,18 @@ public class Deserialization extends JsonBench {
     @Override
     public Object jsoniter() throws Exception {
         return com.jsoniter.JsonIterator.deserialize(JSON_SOURCE().nextByteArray(), JSON_SOURCE().pojoType());
+    }
+
+    @Benchmark
+    @Override
+    public Object protobuf() throws Exception {
+        return foo.bar.User.UsersProto.parseFrom(JSON_SOURCE().nextProtoByteArray());
+    }
+
+    @Benchmark
+    @Override
+    public Object flatbuffers() throws Exception {
+        return UsersFbMapping.deserialize(JSON_SOURCE().nextFlatbuffersByteArray());
     }
 
 }

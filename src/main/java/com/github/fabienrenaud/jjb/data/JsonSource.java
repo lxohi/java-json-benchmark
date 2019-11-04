@@ -2,9 +2,14 @@ package com.github.fabienrenaud.jjb.data;
 
 import com.github.fabienrenaud.jjb.RandomUtils;
 import com.github.fabienrenaud.jjb.data.gen.DataGenerator;
+import com.github.fabienrenaud.jjb.model.Users;
 import com.github.fabienrenaud.jjb.provider.JsonProvider;
 import com.github.fabienrenaud.jjb.stream.StreamDeserializer;
 import com.github.fabienrenaud.jjb.stream.StreamSerializer;
+import com.google.flatbuffers.FlatBufferBuilder;
+import foo.bar.User;
+import foo.bar.UsersFb;
+import foo.bar.UsersFbMapping;
 import okio.BufferedSource;
 import okio.ForwardingSource;
 import okio.Okio;
@@ -13,6 +18,9 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by frenaud on 7/23/16.
@@ -26,8 +34,11 @@ public abstract class JsonSource<T> {
     private final JsonProvider<T> provider;
 
     private final T[] jsonAsObject;
+    private final User.UsersProto[] protobufAsObject;
     private final String[] jsonAsString;
     private final byte[][] jsonAsBytes;
+    private final byte[][] protobufAsBytes;
+    private final byte[][] flatbuffersAsBytes;
     private final ThreadLocal<ByteArrayInputStream[]> jsonAsByteArrayInputStream;
 
     private final DataGenerator<T> dataGenerator;
@@ -38,8 +49,11 @@ public abstract class JsonSource<T> {
         this.provider = provider;
 
         this.jsonAsObject = newPojoArray(quantity);
+        this.protobufAsObject = new User.UsersProto[quantity];
         this.jsonAsString = new String[quantity];
         this.jsonAsBytes = new byte[quantity][];
+        this.protobufAsBytes = new byte[quantity][];
+        this.flatbuffersAsBytes = new byte[quantity][];
 
         this.dataGenerator = dataGenerator;
         this.streamSerializer = streamSerializer;
@@ -65,6 +79,49 @@ public abstract class JsonSource<T> {
                 String json = provider.jackson().writeValueAsString(obj);
                 jsonAsString[i] = json;
                 jsonAsBytes[i] = json.getBytes();
+
+                if (obj.getClass() == Users.class) {
+                    Users users = (Users) obj;
+
+                    // protobuf
+                    foo.bar.User.UsersProto.Builder usersBuilder = foo.bar.User.UsersProto.newBuilder();
+                    for (Users.User user : users.users) {
+                        foo.bar.User.UserProto.Builder userBuilder = foo.bar.User.UserProto.newBuilder();
+                        userBuilder.setId(user._id);
+                        userBuilder.setIndex(user.index);
+                        userBuilder.setGuid(user.guid);
+                        userBuilder.setIsActive(user.isActive);
+                        userBuilder.setBalance(user.balance);
+                        userBuilder.setPicture(user.picture);
+                        userBuilder.setAge(user.age);
+                        userBuilder.setEyeColor(user.eyeColor);
+                        userBuilder.setName(user.name);
+                        userBuilder.setGender(user.gender);
+                        userBuilder.setCompany(user.company);
+                        userBuilder.setEmail(user.email);
+                        userBuilder.setPhone(user.phone);
+                        userBuilder.setAddress(user.address);
+                        userBuilder.setAbout(user.about);
+                        userBuilder.setRegistered(user.registered);
+                        userBuilder.setLatitude(user.latitude);
+                        userBuilder.setLongitude(user.longitude);
+                        userBuilder.addAllTags(user.tags);
+                        userBuilder.addAllFriends(user.friends.stream().map(v -> {
+                            foo.bar.User.FriendProto.Builder friendBuilder = foo.bar.User.FriendProto.newBuilder();
+                            friendBuilder.setId(v.id);
+                            friendBuilder.setName(v.name);
+                            return friendBuilder.build();
+                        }).collect(Collectors.toList()));
+                        userBuilder.setGreeting(user.greeting);
+                        userBuilder.setFavoriteFruit(user.favoriteFruit);
+                        usersBuilder.addUsers(userBuilder);
+                    }
+                    protobufAsObject[i] = usersBuilder.build();
+                    protobufAsBytes[i] = protobufAsObject[i].toByteArray();
+
+                    // flatbuffers
+                    flatbuffersAsBytes[i] = UsersFbMapping.serialize(users);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -91,6 +148,14 @@ public abstract class JsonSource<T> {
         return jsonAsBytes[index(jsonAsBytes.length)];
     }
 
+    public byte[] nextProtoByteArray() {
+        return protobufAsBytes[index(jsonAsBytes.length)];
+    }
+
+    public byte[] nextFlatbuffersByteArray() {
+        return flatbuffersAsBytes[index(jsonAsBytes.length)];
+    }
+
     public Reader nextReader() {
         return new InputStreamReader(nextInputStream());
     }
@@ -105,6 +170,10 @@ public abstract class JsonSource<T> {
 
     public T nextPojo() {
         return jsonAsObject[index(jsonAsObject.length)];
+    }
+
+    public User.UsersProto nextProtobuf() {
+        return protobufAsObject[index(jsonAsObject.length)];
     }
 
     public StreamSerializer<T> streamSerializer() {

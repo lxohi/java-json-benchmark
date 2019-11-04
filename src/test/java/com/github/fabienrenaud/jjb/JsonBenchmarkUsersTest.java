@@ -3,6 +3,7 @@ package com.github.fabienrenaud.jjb;
 import com.github.fabienrenaud.jjb.model.Users;
 import com.github.fabienrenaud.jjb.support.Api;
 import com.github.fabienrenaud.jjb.support.BenchSupport;
+import foo.bar.User;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -42,6 +43,18 @@ public abstract class JsonBenchmarkUsersTest extends JsonBenchmark<Users> {
             System.out.println("Difference in Users!");
             System.out.println("   Original   : " + original);
             System.out.println("   Transformed: " + o);
+            System.out.println();
+            fail();
+        }
+    }
+
+    @Override
+    protected void testProtobuf(User.UsersProto obj) {
+        User.UsersProto users = BENCH.JSON_SOURCE().nextProtobuf();
+        if (!users.equals(obj)) {
+            System.out.println("Difference in Users!");
+            System.out.println("   Original   : " + users);
+            System.out.println("   Transformed: " + obj);
             System.out.println();
             fail();
         }

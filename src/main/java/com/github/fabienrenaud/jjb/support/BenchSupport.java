@@ -10,32 +10,34 @@ import java.util.stream.Collectors;
  */
 public enum BenchSupport {
     USERS(
-        new Libapi(Library.GSON, Api.DATABIND, Api.STREAM),
-        new Libapi(Library.JACKSON, Api.DATABIND, Api.STREAM),
-        new Libapi(Library.JACKSON_AFTERBURNER, Api.DATABIND),
-        new Libapi(Library.ORGJSON, Api.STREAM),
-        new Libapi(Library.GENSON, Api.DATABIND, Api.STREAM),
-        new Libapi(Library.YASSON, Api.DATABIND),
-        new Libapi(Library.JAVAXJSON, Api.STREAM),
-        new Libapi(Library.FLEXJSON, Api.DATABIND),
-        new Libapi(Library.FASTJSON, Api.DATABIND),
-        new Libapi(Library.JSONIO, Api.STREAM),
-        new Libapi(Library.BOON, Api.DATABIND),
-        new Libapi(Library.JOHNZON, Api.DATABIND),
-        new Libapi(Library.JSONSMART, Api.DATABIND),
-        new Libapi(Library.DSLJSON, Api.DATABIND),
-        new Libapi(Library.DSLJSON_REFLECTION, Api.DATABIND),
-        new Libapi(Library.LOGANSQUARE, Api.DATABIND),
-        new Libapi(Library.JSONSIMPLE, Api.STREAM),
-        new Libapi(Library.NANOJSON, Api.STREAM),
-        new Libapi(Library.JODD, Api.DATABIND),
-        new Libapi(Library.MOSHI, Api.DATABIND, Api.STREAM),
-        new Libapi(Library.TAPESTRY, Api.STREAM),
-        new Libapi(Library.JSONITER, Api.DATABIND),
-        new Libapi(Library.MINIMALJSON, Api.STREAM),
-        new Libapi(Library.MJSON, Api.STREAM),
-        new Libapi(Library.UNDERSCORE_JAVA, Api.STREAM),
-        new Libapi(Library.PUREJSON, Api.STREAM)
+            new Libapi(Library.GSON, Api.DATABIND, Api.STREAM),
+            new Libapi(Library.JACKSON, Api.DATABIND, Api.STREAM),
+            new Libapi(Library.JACKSON_AFTERBURNER, Api.DATABIND),
+            new Libapi(Library.ORGJSON, Api.STREAM),
+            new Libapi(Library.GENSON, Api.DATABIND, Api.STREAM),
+            new Libapi(Library.YASSON, Api.DATABIND),
+            new Libapi(Library.JAVAXJSON, Api.STREAM),
+            new Libapi(Library.FLEXJSON, Api.DATABIND),
+            new Libapi(Library.FASTJSON, Api.DATABIND),
+            new Libapi(Library.JSONIO, Api.STREAM),
+            new Libapi(Library.BOON, Api.DATABIND),
+            new Libapi(Library.JOHNZON, Api.DATABIND),
+            new Libapi(Library.JSONSMART, Api.DATABIND),
+            new Libapi(Library.DSLJSON, Api.DATABIND),
+            new Libapi(Library.DSLJSON_REFLECTION, Api.DATABIND),
+            new Libapi(Library.LOGANSQUARE, Api.DATABIND),
+            new Libapi(Library.JSONSIMPLE, Api.STREAM),
+            new Libapi(Library.NANOJSON, Api.STREAM),
+            new Libapi(Library.JODD, Api.DATABIND),
+            new Libapi(Library.MOSHI, Api.DATABIND, Api.STREAM),
+            new Libapi(Library.TAPESTRY, Api.STREAM),
+            new Libapi(Library.JSONITER, Api.DATABIND),
+            new Libapi(Library.MINIMALJSON, Api.STREAM),
+            new Libapi(Library.MJSON, Api.STREAM),
+            new Libapi(Library.UNDERSCORE_JAVA, Api.STREAM),
+            new Libapi(Library.PUREJSON, Api.STREAM),
+            new Libapi(Library.PROTOBUF, Api.DATABIND),
+            new Libapi(Library.FLATBUFFERS, Api.DATABIND)
     ),
     CLIENTS(
             new Libapi(Library.GSON, Api.DATABIND),
@@ -75,9 +77,9 @@ public enum BenchSupport {
     }
 
     public Set<Library> supportedLibs() {
-         return libapis.stream()
-            .filter(Libapi::active)
-            .map(Libapi::lib)
-            .collect(Collectors.toSet());
+        return libapis.stream()
+                .filter(Libapi::active)
+                .map(Libapi::lib)
+                .collect(Collectors.toSet());
     }
 }

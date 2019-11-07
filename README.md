@@ -1,5 +1,11 @@
 [![Build Status](https://travis-ci.org/fabienrenaud/java-json-benchmark.svg?branch=master)](https://travis-ci.org/fabienrenaud/java-json-benchmark)
 
+# Benchmark of Java JSON libraries & Protobuf & Flatbuffers & Kryo & JVM serialization
+
+Adding Protobuf & Flatbuffers & Kryo & JVM serialization into the original benchmark ***with some quick & dirty hacks***.
+
+---
+
 # Benchmark of Java JSON libraries
 
 ## Purpose

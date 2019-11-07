@@ -52,6 +52,10 @@ public abstract class JsonBenchmark<T> {
                 testProtobuf((byte[]) o);
             } else if (lib == Library.FLATBUFFERS) {
                 testFlatBuffers((byte[]) o);
+            } else if (lib == Library.KRYO) {
+                testKryo((byte[]) o);
+            } else if (lib == Library.JVM) {
+                testJvm((byte[]) o);
             } else {
                 testString(o.toString());
             }
@@ -76,6 +80,14 @@ public abstract class JsonBenchmark<T> {
 
     private void testFlatBuffers(byte[] bytes) {
         testPojo((T) UsersFbMapping.deserialize(bytes));
+    }
+
+    private void testKryo(byte[] bytes) {
+        testPojo((T) KryoUtils.deserialize(bytes));
+    }
+
+    private void testJvm(byte[] bytes) {
+        testPojo((T) JvmSerializeUtils.deserialize(bytes));
     }
 
     private boolean supports(final Library lib) {
@@ -284,4 +296,19 @@ public abstract class JsonBenchmark<T> {
             test(Library.FLATBUFFERS, BENCH.flatbuffers());
         }
     }
+
+    @Test
+    public void kryo() throws Exception {
+        for (int i = 0; i < ITERATIONS; i++) {
+            test(Library.KRYO, BENCH.kryo());
+        }
+    }
+
+    @Test
+    public void jvm() throws Exception {
+        for (int i = 0; i < ITERATIONS; i++) {
+            test(Library.JVM, BENCH.jvm());
+        }
+    }
+
 }

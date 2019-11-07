@@ -37,7 +37,11 @@ public enum BenchSupport {
             new Libapi(Library.UNDERSCORE_JAVA, Api.STREAM),
             new Libapi(Library.PUREJSON, Api.STREAM),
             new Libapi(Library.PROTOBUF, Api.DATABIND),
-            new Libapi(Library.FLATBUFFERS, Api.DATABIND)
+            new Libapi(Library.FLATBUFFERS, Api.DATABIND),
+            new Libapi(Library.FLATBUFFERS_READ_THROUGH, Api.DATABIND),
+            new Libapi(Library.FLATBUFFERS_READ_THROUGH2, Api.DATABIND),
+            new Libapi(Library.KRYO, Api.DATABIND),
+            new Libapi(Library.JVM, Api.DATABIND)
     ),
     CLIENTS(
             new Libapi(Library.GSON, Api.DATABIND),

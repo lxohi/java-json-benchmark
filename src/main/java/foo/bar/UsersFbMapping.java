@@ -4,6 +4,7 @@ import com.github.fabienrenaud.jjb.model.Users;
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,6 +119,105 @@ public class UsersFbMapping {
             user.greeting = ufb.greeting();
             user.favoriteFruit = ufb.favoriteFruit();
             userList.add(user);
+        }
+        return us;
+    }
+
+    public static Users deserializeThrough(byte[] bytes) {
+        UsersFb usfb = UsersFb.getRootAsUsersFb(ByteBuffer.wrap(bytes));
+        Users us = new Users();
+        List<Users.User> userList = new ArrayList<>(usfb.usersLength());
+        us.users = userList;
+        Users.User user = new Users.User();
+        user.tags = new ArrayList<>(1);
+        user.tags.add("");
+        user.friends = new ArrayList<>(1);
+        userList.add(user);
+        Users.Friend friend = new Users.Friend();
+        user.friends.add(friend);
+        for (int i = 0; i < usfb.usersLength(); i++) {
+            UserFb ufb = usfb.users(i);
+            user._id = ufb.id();
+            user.index = ufb.index();
+            user.guid = ufb.guid();
+            user.isActive = ufb.isActive();
+            user.balance = ufb.balance();
+            user.picture = ufb.picture();
+            user.age = ufb.age();
+            user.eyeColor = ufb.eyeColor();
+            user.name = ufb.name();
+            user.gender = ufb.gender();
+            user.company = ufb.company();
+            user.email = ufb.email();
+            user.phone = ufb.phone();
+            user.address = ufb.address();
+            user.about = ufb.about();
+            user.registered = ufb.registered();
+            user.latitude = ufb.latitude();
+            user.longitude = ufb.longitude();
+
+            for (int j = 0; j < ufb.tagsLength(); j++) {
+                user.tags.set(0, ufb.tags(j));
+            }
+
+            for (int j = 0; j < ufb.friendsLength(); j++) {
+                FriendFb ffb = ufb.friends(j);
+                friend.id = ffb.id();
+                friend.name = ffb.name();
+            }
+
+            user.greeting = ufb.greeting();
+            user.favoriteFruit = ufb.favoriteFruit();
+        }
+        return us;
+    }
+
+    public static Users deserializeThrough2(byte[] bytes) {
+        UsersFb usfb = UsersFb.getRootAsUsersFb(ByteBuffer.wrap(bytes));
+        Users us = new Users();
+        List<Users.User> userList = new ArrayList<>(usfb.usersLength());
+        us.users = userList;
+        Users.User user = new Users.User();
+        user.tags = new ArrayList<>(1);
+        user.tags.add("");
+        user.friends = new ArrayList<>(1);
+        userList.add(user);
+        Users.Friend friend = new Users.Friend();
+        user.friends.add(friend);
+        for (int i = 0; i < usfb.usersLength(); i++) {
+            UserFb ufb = usfb.users(i);
+            user._id = StandardCharsets.UTF_8.decode(ufb.idAsByteBuffer()).toString();
+            user.index = ufb.index();
+            user.guid = StandardCharsets.UTF_8.decode(ufb.guidAsByteBuffer()).toString();
+            user.isActive = ufb.isActive();
+            user.balance = StandardCharsets.UTF_8.decode(ufb.balanceAsByteBuffer()).toString();
+            user.picture = StandardCharsets.UTF_8.decode(ufb.pictureAsByteBuffer()).toString();
+            user.age = ufb.age();
+
+            user.eyeColor = StandardCharsets.UTF_8.decode(ufb.eyeColorAsByteBuffer()).toString();
+            user.name = StandardCharsets.UTF_8.decode(ufb.nameAsByteBuffer()).toString();
+            user.gender = StandardCharsets.UTF_8.decode(ufb.genderAsByteBuffer()).toString();
+            user.company = StandardCharsets.UTF_8.decode(ufb.companyAsByteBuffer()).toString();
+            user.email = StandardCharsets.UTF_8.decode(ufb.emailAsByteBuffer()).toString();
+            user.phone = StandardCharsets.UTF_8.decode(ufb.phoneAsByteBuffer()).toString();
+            user.address = StandardCharsets.UTF_8.decode(ufb.addressAsByteBuffer()).toString();
+            user.about = StandardCharsets.UTF_8.decode(ufb.aboutAsByteBuffer()).toString();
+            user.registered = StandardCharsets.UTF_8.decode(ufb.registeredAsByteBuffer()).toString();
+            user.latitude = ufb.latitude();
+            user.longitude = ufb.longitude();
+
+            for (int j = 0; j < ufb.tagsLength(); j++) {
+                user.tags.set(0, ufb.tags(j));
+            }
+
+            for (int j = 0; j < ufb.friendsLength(); j++) {
+                FriendFb ffb = ufb.friends(j);
+                friend.id = StandardCharsets.UTF_8.decode(ffb.idAsByteBuffer()).toString();
+                friend.name = StandardCharsets.UTF_8.decode(ffb.nameAsByteBuffer()).toString();
+            }
+
+            user.greeting = StandardCharsets.UTF_8.decode(ufb.greetingAsByteBuffer()).toString();
+            user.favoriteFruit = StandardCharsets.UTF_8.decode(ufb.favoriteFruitAsByteBuffer()).toString();
         }
         return us;
     }

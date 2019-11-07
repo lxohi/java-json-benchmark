@@ -9,6 +9,7 @@ import com.github.fabienrenaud.jjb.data.JsonSourceFactory;
 public abstract class JsonBench {
 
     protected static final JsonSource CLI_JSON_SOURCE = JsonSourceFactory.create();
+
     public abstract JsonSource JSON_SOURCE();
 
     public Object gson() throws Exception {
@@ -122,4 +123,21 @@ public abstract class JsonBench {
     public Object flatbuffers() throws Exception {
         return null;
     }
+
+    public Object flatbuffers_read_through() throws Exception {
+        return null;
+    }
+
+    public Object flatbuffers_read_through2() throws Exception {
+        return null;
+    }
+
+    public Object kryo() throws Exception {
+        return null;
+    }
+
+    public Object jvm() throws Exception {
+        return null;
+    }
+
 }

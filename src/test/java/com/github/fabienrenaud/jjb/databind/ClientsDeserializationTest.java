@@ -10,6 +10,7 @@ public class ClientsDeserializationTest extends JsonBenchmarkClientsTest {
     public ClientsDeserializationTest() {
         super(new Deserialization() {
             private final JsonSource source = JsonSourceFactory.create("clients", 1, 2000);
+
             @Override
             public JsonSource JSON_SOURCE() {
                 return source;
@@ -49,4 +50,13 @@ public class ClientsDeserializationTest extends JsonBenchmarkClientsTest {
     @Override
     public void flatbuffers() throws Exception {
     }
+
+    @Override
+    public void kryo() throws Exception {
+    }
+
+    @Override
+    public void jvm() throws Exception {
+    }
+
 }

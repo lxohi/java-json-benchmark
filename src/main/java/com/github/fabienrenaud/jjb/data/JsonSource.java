@@ -1,5 +1,9 @@
 package com.github.fabienrenaud.jjb.data;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
+import com.github.fabienrenaud.jjb.JvmSerializeUtils;
+import com.github.fabienrenaud.jjb.KryoUtils;
 import com.github.fabienrenaud.jjb.RandomUtils;
 import com.github.fabienrenaud.jjb.data.gen.DataGenerator;
 import com.github.fabienrenaud.jjb.model.Users;
@@ -19,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +44,8 @@ public abstract class JsonSource<T> {
     private final byte[][] jsonAsBytes;
     private final byte[][] protobufAsBytes;
     private final byte[][] flatbuffersAsBytes;
+    private final byte[][] kryoAsBytes;
+    private final byte[][] serializableAsBytes;
     private final ThreadLocal<ByteArrayInputStream[]> jsonAsByteArrayInputStream;
 
     private final DataGenerator<T> dataGenerator;
@@ -54,6 +61,8 @@ public abstract class JsonSource<T> {
         this.jsonAsBytes = new byte[quantity][];
         this.protobufAsBytes = new byte[quantity][];
         this.flatbuffersAsBytes = new byte[quantity][];
+        this.kryoAsBytes = new byte[quantity][];
+        this.serializableAsBytes = new byte[quantity][];
 
         this.dataGenerator = dataGenerator;
         this.streamSerializer = streamSerializer;
@@ -121,6 +130,12 @@ public abstract class JsonSource<T> {
 
                     // flatbuffers
                     flatbuffersAsBytes[i] = UsersFbMapping.serialize(users);
+
+                    // kryo
+                    kryoAsBytes[i] = KryoUtils.serialize(users);
+
+                    //serializable
+                    serializableAsBytes[i] = JvmSerializeUtils.serialize(users);
                 }
             }
         } catch (Exception ex) {
@@ -154,6 +169,14 @@ public abstract class JsonSource<T> {
 
     public byte[] nextFlatbuffersByteArray() {
         return flatbuffersAsBytes[index(jsonAsBytes.length)];
+    }
+
+    public byte[] nextKryoByteArray() {
+        return kryoAsBytes[index(jsonAsBytes.length)];
+    }
+
+    public byte[] nextSerializableByteArray() {
+        return serializableAsBytes[index(jsonAsBytes.length)];
     }
 
     public Reader nextReader() {

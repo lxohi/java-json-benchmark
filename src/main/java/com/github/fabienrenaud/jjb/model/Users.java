@@ -5,6 +5,7 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,7 +15,7 @@ import java.util.Objects;
 @JsonObject
 @CompiledJson
 @jodd.json.meta.JSON
-public class Users {
+public class Users implements Serializable {
 
     @JsonField
     @jodd.json.meta.JSON
@@ -42,7 +43,7 @@ public class Users {
 
     @JsonObject
     @CompiledJson
-    public static final class User {
+    public static final class User implements Serializable{
 
         @JsonField
         public String _id;
@@ -139,7 +140,7 @@ public class Users {
 
     @JsonObject
     @CompiledJson
-    public static final class Friend {
+    public static final class Friend implements Serializable {
 
         @JsonField
         public String id;

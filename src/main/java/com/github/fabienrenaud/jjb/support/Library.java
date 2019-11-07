@@ -34,7 +34,11 @@ public enum Library {
     UNDERSCORE_JAVA,
     PUREJSON,
     PROTOBUF,
-    FLATBUFFERS;
+    FLATBUFFERS,
+    FLATBUFFERS_READ_THROUGH,
+    FLATBUFFERS_READ_THROUGH2,
+    KRYO,
+    JVM;
 
     public static Set<Library> fromCsv(String str) {
         if (str == null || str.trim().isEmpty()) {

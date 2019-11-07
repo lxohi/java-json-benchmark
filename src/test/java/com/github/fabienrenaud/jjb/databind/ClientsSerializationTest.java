@@ -51,4 +51,12 @@ public class ClientsSerializationTest extends JsonBenchmarkClientsTest {
     public void flatbuffers() throws Exception {
     }
 
+    @Override
+    public void kryo() throws Exception {
+    }
+
+    @Override
+    public void jvm() throws Exception {
+    }
+
 }

@@ -2,13 +2,21 @@ package com.github.fabienrenaud.jjb.databind;
 
 import com.alibaba.fastjson.JSON;
 import com.bluelinelabs.logansquare.LoganSquare;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
 import com.github.fabienrenaud.jjb.JsonBench;
+import com.github.fabienrenaud.jjb.JvmSerializeUtils;
+import com.github.fabienrenaud.jjb.KryoUtils;
 import com.github.fabienrenaud.jjb.data.JsonSource;
+import com.github.fabienrenaud.jjb.model.Users;
 import com.google.gson.JsonSyntaxException;
+import foo.bar.UsersFb;
 import foo.bar.UsersFbMapping;
 import org.openjdk.jmh.annotations.Benchmark;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 
 /**
@@ -128,6 +136,39 @@ public class Deserialization extends JsonBench {
     @Override
     public Object flatbuffers() throws Exception {
         return UsersFbMapping.deserialize(JSON_SOURCE().nextFlatbuffersByteArray());
+    }
+
+    @Benchmark
+    @Override
+    public Object flatbuffers_read_through() throws Exception {
+        return UsersFbMapping.deserializeThrough(JSON_SOURCE().nextFlatbuffersByteArray());
+    }
+
+    @Benchmark
+    @Override
+    public Object flatbuffers_read_through2() throws Exception {
+        return UsersFbMapping.deserializeThrough2(JSON_SOURCE().nextFlatbuffersByteArray());
+    }
+
+    private final static Kryo kryo = new Kryo();
+
+    static {
+        kryo.register(Users.class);
+        kryo.register(Users.User.class);
+        kryo.register(ArrayList.class);
+        kryo.register(Users.Friend.class);
+    }
+
+    @Benchmark
+    @Override
+    public Object kryo() throws Exception {
+        return KryoUtils.deserialize(JSON_SOURCE().nextKryoByteArray());
+    }
+
+    @Benchmark
+    @Override
+    public Object jvm() throws Exception {
+        return JvmSerializeUtils.deserialize(JSON_SOURCE().nextSerializableByteArray());
     }
 
 }

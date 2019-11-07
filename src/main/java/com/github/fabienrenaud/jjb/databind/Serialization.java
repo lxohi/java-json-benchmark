@@ -3,8 +3,12 @@ package com.github.fabienrenaud.jjb.databind;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.bluelinelabs.logansquare.LoganSquare;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
 import com.github.fabienrenaud.jjb.JsonBench;
 import com.github.fabienrenaud.jjb.JsonUtils;
+import com.github.fabienrenaud.jjb.JvmSerializeUtils;
+import com.github.fabienrenaud.jjb.KryoUtils;
 import com.github.fabienrenaud.jjb.data.JsonSource;
 import com.github.fabienrenaud.jjb.model.Users;
 import foo.bar.UsersFbMapping;
@@ -13,6 +17,8 @@ import okio.Okio;
 import org.openjdk.jmh.annotations.Benchmark;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Serialization extends JsonBench {
 
@@ -159,4 +165,26 @@ public class Serialization extends JsonBench {
     public Object flatbuffers() throws Exception {
         return UsersFbMapping.serialize((Users) JSON_SOURCE().nextPojo());
     }
+
+    private final static Kryo kryo = new Kryo();
+
+    static {
+        kryo.register(Users.class);
+        kryo.register(Users.User.class);
+        kryo.register(ArrayList.class);
+        kryo.register(Users.Friend.class);
+    }
+
+    @Benchmark
+    @Override
+    public Object kryo() throws Exception {
+        return KryoUtils.serialize((Users) JSON_SOURCE().nextPojo());
+    }
+
+    @Benchmark
+    @Override
+    public Object jvm() throws Exception {
+        return JvmSerializeUtils.serialize((Users) JSON_SOURCE().nextPojo());
+    }
+
 }

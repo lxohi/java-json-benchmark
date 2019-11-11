@@ -5,6 +5,7 @@ plugins {
 }
 
 apply plugin: 'java'
+apply plugin: 'scala'
 apply plugin: 'application'
 apply plugin: 'idea'
 apply plugin: 'com.google.protobuf'
@@ -20,6 +21,21 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    scalaCompilerPlugin
+}
+
+sourceSets {
+    main {
+        scala {
+            srcDirs = ['src/main/scala', 'src/main/java']
+        }
+        java {
+            srcDirs = []
+        }
+    }
+}
+
 ext {
     jacksonVersion = '2.10.0'
     dslJsonVersion = '1.9.3'
@@ -29,6 +45,12 @@ ext {
 
 dependencies {
 
+    compile group: 'org.scala-lang', name: 'scala-library', version: '2.11.12'
+    scalaCompilerPlugin 'org.scalamacros:paradise_2.11.12:2.1.1'
+    compile group: 'io.circe', name: 'circe-core_2.11', version: '0.11.1'
+    compile group: 'io.circe', name: 'circe-generic_2.11', version: '0.11.1'
+    compile group: 'io.circe', name: 'circe-generic-extras_2.11', version: '0.11.1'
+    compile group: 'io.circe', name: 'circe-parser_2.11', version: '0.11.1'
     // CLI and misc
     compile group: 'io.airlift', name: 'airline', version: '0.8'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
@@ -119,7 +141,7 @@ test {
     }
 }
 
-task (depsize) {
+task(depsize) {
     doLast {
         def size = 0;
         def formatStr = "%,10.2f"
@@ -130,13 +152,35 @@ task (depsize) {
         out << "${String.format(formatStr, size)} MiB\n\n"
 
         configurations
-            .default
-            .sort { -it.length() }
-            .each {
-                out << "${it.name}".padRight(45)
-                out << "${String.format(formatStr, (it.length() / 1024))} KiB\n"
-            }
-            println(out)
+                .default
+                .sort { -it.length() }
+                .each {
+                    out << "${it.name}".padRight(45)
+                    out << "${String.format(formatStr, (it.length() / 1024))} KiB\n"
+                }
+        println(out)
     }
 }
 
+tasks.withType(ScalaCompile) {
+    // Map plugin jars to -Xplugin parameter
+    List<String> parameters =
+            configurations.scalaCompilerPlugin.files.collect {
+                '-Xplugin:' + it.absolutePath
+            }
+
+    // Add existing parameters
+    List<String> existingParameters = scalaCompileOptions.additionalParameters
+    if (existingParameters) {
+        parameters.addAll(existingParameters)
+    }
+
+    // Add whatever flags you typically add
+    parameters += [
+            '-language:implicitConversions',
+            '-language:higherKinds'
+    ]
+
+    // Finally set the additionalParameters
+    scalaCompileOptions.additionalParameters = parameters
+}

@@ -1,5 +1,6 @@
 package com.github.fabienrenaud.jjb.data;
 
+import circe.benchmark.CirceUtil;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.fabienrenaud.jjb.JvmSerializeUtils;
@@ -39,6 +40,7 @@ public abstract class JsonSource<T> {
     private final JsonProvider<T> provider;
 
     private final T[] jsonAsObject;
+    private final Object[] jsonAsScalaObject;
     private final User.UsersProto[] protobufAsObject;
     private final String[] jsonAsString;
     private final byte[][] jsonAsBytes;
@@ -56,6 +58,7 @@ public abstract class JsonSource<T> {
         this.provider = provider;
 
         this.jsonAsObject = newPojoArray(quantity);
+        this.jsonAsScalaObject = new Object[quantity];
         this.protobufAsObject = new User.UsersProto[quantity];
         this.jsonAsString = new String[quantity];
         this.jsonAsBytes = new byte[quantity][];
@@ -134,8 +137,13 @@ public abstract class JsonSource<T> {
                     // kryo
                     kryoAsBytes[i] = KryoUtils.serialize(users);
 
-                    //serializable
+                    // serializable
                     serializableAsBytes[i] = JvmSerializeUtils.serialize(users);
+
+                    // scala object
+                    jsonAsScalaObject[i] = CirceUtil.usersToScala(users);
+
+                    System.out.println("======= json size: " + jsonAsBytes[i].length + ", protobuf size: " + protobufAsBytes[i].length + ", flatbuffers size: " + flatbuffersAsBytes);
                 }
             }
         } catch (Exception ex) {
@@ -193,6 +201,10 @@ public abstract class JsonSource<T> {
 
     public T nextPojo() {
         return jsonAsObject[index(jsonAsObject.length)];
+    }
+
+    public Object nextScalaObject() {
+        return jsonAsScalaObject[index(jsonAsObject.length)];
     }
 
     public User.UsersProto nextProtobuf() {

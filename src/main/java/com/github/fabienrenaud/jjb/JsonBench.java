@@ -140,4 +140,8 @@ public abstract class JsonBench {
         return null;
     }
 
+    public Object circe() throws Exception {
+        return null;
+    }
+
 }

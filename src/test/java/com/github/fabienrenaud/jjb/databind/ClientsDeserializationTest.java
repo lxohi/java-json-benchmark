@@ -59,4 +59,8 @@ public class ClientsDeserializationTest extends JsonBenchmarkClientsTest {
     public void jvm() throws Exception {
     }
 
+    @Override
+    public void circe() throws Exception {
+    }
+
 }

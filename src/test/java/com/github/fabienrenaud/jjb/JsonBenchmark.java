@@ -1,5 +1,6 @@
 package com.github.fabienrenaud.jjb;
 
+import circe.benchmark.ScalaUsers;
 import com.github.fabienrenaud.jjb.model.Clients;
 import com.github.fabienrenaud.jjb.model.Users;
 import com.github.fabienrenaud.jjb.support.Api;
@@ -41,6 +42,8 @@ public abstract class JsonBenchmark<T> {
             testPojo((T) o);
         } else if (o instanceof User.UsersProto) {
             testProtobuf((User.UsersProto) o);
+        } else if (o instanceof ScalaUsers) {
+            assert(BENCH.JSON_SOURCE().nextScalaObject().equals(o));
         } else if (o instanceof com.cedarsoftware.util.io.JsonObject) {
             String v = com.cedarsoftware.util.io.JsonWriter.objectToJson(o, BENCH.JSON_SOURCE().provider().jsonioStreamOptions());
             testString(v);
@@ -308,6 +311,13 @@ public abstract class JsonBenchmark<T> {
     public void jvm() throws Exception {
         for (int i = 0; i < ITERATIONS; i++) {
             test(Library.JVM, BENCH.jvm());
+        }
+    }
+
+    @Test
+    public void circe() throws Exception {
+        for (int i = 0; i < ITERATIONS; i++) {
+            test(Library.CIRCE, BENCH.circe());
         }
     }
 

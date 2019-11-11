@@ -1,5 +1,7 @@
 package com.github.fabienrenaud.jjb.databind;
 
+import circe.benchmark.CirceUtil$;
+import circe.benchmark.ScalaUsers;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.bluelinelabs.logansquare.LoganSquare;
@@ -185,6 +187,12 @@ public class Serialization extends JsonBench {
     @Override
     public Object jvm() throws Exception {
         return JvmSerializeUtils.serialize((Users) JSON_SOURCE().nextPojo());
+    }
+
+    @Benchmark
+    @Override
+    public Object circe() throws Exception {
+        return CirceUtil$.MODULE$.serialize((ScalaUsers) JSON_SOURCE().nextScalaObject());
     }
 
 }

@@ -38,7 +38,8 @@ public enum Library {
     FLATBUFFERS_READ_THROUGH,
     FLATBUFFERS_READ_THROUGH2,
     KRYO,
-    JVM;
+    JVM,
+    CIRCE;
 
     public static Set<Library> fromCsv(String str) {
         if (str == null || str.trim().isEmpty()) {

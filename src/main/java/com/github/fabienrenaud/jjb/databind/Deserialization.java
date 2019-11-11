@@ -1,5 +1,6 @@
 package com.github.fabienrenaud.jjb.databind;
 
+import circe.benchmark.CirceUtil$;
 import com.alibaba.fastjson.JSON;
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.esotericsoftware.kryo.Kryo;
@@ -169,6 +170,12 @@ public class Deserialization extends JsonBench {
     @Override
     public Object jvm() throws Exception {
         return JvmSerializeUtils.deserialize(JSON_SOURCE().nextSerializableByteArray());
+    }
+
+    @Benchmark
+    @Override
+    public Object circe() throws Exception {
+        return CirceUtil$.MODULE$.deserialize(JSON_SOURCE().nextString());
     }
 
 }

@@ -4,6 +4,21 @@
 
 Adding Protobuf & Flatbuffers & Kryo & JVM serialization into the original benchmark ***with some quick & dirty hacks***.
 
+## Benchmark environment:
+
+- CPU: Intel Xeon(Cascade Lake) Platinum 8269CY
+- Cores: 4
+- RAM: 8GB
+
+## Benchmark results:
+[[https://github.com/lxohi/java-json-protobuf-flatbuffers-kryo-jvm-benchmark/blob/master/archive/image_20191113/serialization.png?raw=true|alt=serialization|width=900]]
+[[https://github.com/lxohi/java-json-protobuf-flatbuffers-kryo-jvm-benchmark/blob/master/archive/image_20191113/deserialization.png|alt=deserialization|width=900]]
+
+
+
+
+---
+The following content was from the original README.md:
 ---
 
 # Benchmark of Java JSON libraries

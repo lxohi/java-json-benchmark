@@ -1,8 +1,6 @@
-[![Build Status](https://travis-ci.org/fabienrenaud/java-json-benchmark.svg?branch=master)](https://travis-ci.org/fabienrenaud/java-json-benchmark)
-
 # Benchmark of Java JSON libraries & Protobuf & Flatbuffers & Kryo & JVM serialization
 
-Adding Protobuf & Flatbuffers & Kryo & JVM serialization into the original benchmark ***with some quick & dirty hacks***.
+Adding Protobuf & Flatbuffers & Kryo & JVM serialization into the original benchmark with some quick & dirty hacks.
 
 ## Benchmark environment:
 
@@ -15,10 +13,19 @@ Adding Protobuf & Flatbuffers & Kryo & JVM serialization into the original bench
 
 ![](https://github.com/lxohi/java-json-protobuf-flatbuffers-kryo-jvm-benchmark/blob/master/archive/results-20191113/deserialization.png)
 
----
----
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
 The following content was from the original README.md:
+
 ---
+[![Build Status](https://travis-ci.org/fabienrenaud/java-json-benchmark.svg?branch=master)](https://travis-ci.org/fabienrenaud/java-json-benchmark)
 
 # Benchmark of Java JSON libraries
 

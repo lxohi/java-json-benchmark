@@ -11,9 +11,9 @@ Adding Protobuf & Flatbuffers & Kryo & JVM serialization into the original bench
 - RAM: 8GB
 
 ## Benchmark results:
-![](https://github.com/lxohi/java-json-protobuf-flatbuffers-kryo-jvm-benchmark/blob/master/archive/image20191113/serialization.png)
+![](https://github.com/lxohi/java-json-protobuf-flatbuffers-kryo-jvm-benchmark/blob/master/archive/results-20191113/serialization.png)
 
-![](https://github.com/lxohi/java-json-protobuf-flatbuffers-kryo-jvm-benchmark/blob/master/archive/image20191113/deserialization.png)
+![](https://github.com/lxohi/java-json-protobuf-flatbuffers-kryo-jvm-benchmark/blob/master/archive/results-20191113/deserialization.png)
 
 ---
 ---

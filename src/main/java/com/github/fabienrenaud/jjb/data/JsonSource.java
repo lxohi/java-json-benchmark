@@ -143,7 +143,7 @@ public abstract class JsonSource<T> {
                     // scala object
                     jsonAsScalaObject[i] = CirceUtil.usersToScala(users);
 
-                    System.out.println("======= json size: " + jsonAsBytes[i].length + ", protobuf size: " + protobufAsBytes[i].length + ", flatbuffers size: " + flatbuffersAsBytes);
+                    System.out.println("======= json size: " + jsonAsBytes[i].length + ", protobuf size: " + protobufAsBytes[i].length + ", flatbuffers size: " + flatbuffersAsBytes[i].length);
                 }
             }
         } catch (Exception ex) {
